@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Project | Intro to AI</title>
+</head>
+
+<!-- basic styles -->
+<style>
+  body{
+    font-family: "Georgia", serif;
+    text-align: center;
+    background-color: #0B1426;
+    color: white;
+  }
+  h2{
+    font-style: italic;
+    font-weight:lighter;
+  }
+  button{
+    font-family: "Georgia", serif;
+    text-align: center;
+    background-color: #AFD971;
+    color: #0B1426;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 2rem 0rem;
+  }
+  #img_container{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 1rem;
+  }
+  img{
+    width: 32%;
+  }
+</style>
+
+<!-- imported scripts -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- my javascript -->
+<script type=text/javascript>
+
+// run the GAN model
+$(function() {
+    $("#runModel").click(function(event) {
+        $.getJSON('/img_generator', {},
+            function(data) {});
+        return false;
+    });
+    reloadImgs();
+});
+
+</script>
+
+<body>
+    <h1>MNIST Data Generator</h1>
+    <h2>CSCI 80a - Final Project</h2>
+    <button id="runModel" type="button" onclick="window.location.href='{{ url_for( 'img_generator') }}';">Run GAN Model</button>
+    <h3>Results</h3>
+    <p>Model finished running...</p>
+    <div id="img_container">
+      <img src="{{url_for('static', filename='imgEpoch0.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch0">
+      <img src="{{url_for('static', filename='imgEpoch100.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch100">
+      <img src="{{url_for('static', filename='imgEpoch200.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch200">
+      <img src="{{url_for('static', filename='imgEpoch300.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch300">
+      <img src="{{url_for('static', filename='imgEpoch400.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch400">
+      <img src="{{url_for('static', filename='imgEpoch500.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch500">
+      <img src="{{url_for('static', filename='imgEpoch600.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch600">
+      <img src="{{url_for('static', filename='imgEpoch700.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch700">
+      <img src="{{url_for('static', filename='imgEpoch800.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch800">
+      <img src="{{url_for('static', filename='imgEpoch900.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch900">
+      <img src="{{url_for('static', filename='imgEpoch1000.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch1000">
+      <img src="{{url_for('static', filename='imgEpoch1100.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch1100">
+    </div>
+    <div><p>Alyssa Blanco</p></div>
+</body>
+</html>
