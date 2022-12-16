@@ -14,26 +14,25 @@ from sklearn.utils import shuffle
 
 app = Flask(__name__)
 
-# Change this to the location of the database directories
 DB_DIR = os.path.dirname(os.path.realpath("./"))
 
 # Import databases
 sys.path.insert(1, DB_DIR)
 
+# global variables (would eventually like to take these as inputs from the front end)
 numEpochs = 1300
 saveInternval = 100
 
+# Flask webpage
 @app.route('/')
 def render_webpage():
     return render_template("index.html", numEpochs=numEpochs, saveInternval=saveInternval)
 
+# improved GAN model and code from assignment 10
 @app.route('/img_generator')
 def img_generator():
-    print("INSIDE IMG GENERATOR")
     class GAN():
-        print("GOT HERES")
         def __init__(self, input_shape=(28,28,1), rand_vector_shape=(100,), lr=0.0002, beta=0.5):
-            print("INIT")
             # input sizes
             self.image_shape = input_shape
             self.input_size = rand_vector_shape
@@ -44,7 +43,6 @@ def img_generator():
             # generator model
             self.generator = self.generator_model()
             self.generator.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.Adam(0.001, beta), metrics=['accuracy'])
-            # print(self.generator.summary())
 
              # Create Discriminator model
             self.discriminator = self.discriminator_model()
@@ -65,8 +63,6 @@ def img_generator():
             return None
 
         def discriminator_model(self):
-          print("DISCRIM")
-          """Create discriminator model."""
           model = tf.keras.models.Sequential(name='Discriminator')
           model.add(layers.Flatten())
           model.add(layers.Dense(units=1024, kernel_initializer='normal'))
@@ -82,8 +78,6 @@ def img_generator():
           return model
 
         def generator_model(self):
-          print("GENERATE")
-          """Create generator model."""
           model = tf.keras.models.Sequential(name='Generator')
           model.add(layers.Dense(units=256, kernel_initializer='normal'))
           model.add(layers.LeakyReLU(alpha=0.02))
@@ -96,9 +90,7 @@ def img_generator():
           return model
 
         def plot_imgs(self, epoch):
-            print("INSIDE plot imgs")
             r, c = 4,4
-
             fig, axs = plt.subplots(r, c)
             cnt = 0
             for i in range(r):
@@ -106,15 +98,11 @@ def img_generator():
                     noise = np.random.normal(0, 1, (1, self.input_size[0]))
                     img = self.generator.predict(noise)[0,:]
                     axs[i,j].imshow(img, cmap = plt.cm.binary)
-                    # axs[i,j].imshow(img, interpolation='nearest', cmap='gray')
                     axs[i,j].axis('off')
                     cnt = cnt + 1
-            # fig.savefig("imgEpoch{0}.png".format(epoch))
-            # full_filename = os.path.join(os.path.realpath("./static"), 'imgEpoch{0}.png')
             full_filename = 'static/imgEpoch{0}.png'
             fig.savefig(full_filename.format(epoch))
             plt.title("Epoch " + str(epoch))
-            # plt.show()
             return None
 
         def train(self, X_train, batch_size=128, epochs=numEpochs, save_interval=100):
@@ -130,13 +118,7 @@ def img_generator():
                 X_neg_train_dis = self.generator.predict(tf.random.normal((half_batch, self.input_size[0])))
 
                 # concat pos, negative and shuffle
-                # X_train_dis, y_train_dis = tf.concat([X_neg_train_dis, X_pos_train_dis], axis=0), tf.concat([y_neg_train_dis, y_pos_train_dis], axis=0)
                 X_train_dis, y_train_dis = tf.concat([X_neg_train_dis, X_pos_train_dis], axis=0), tf.concat([y_neg_train_dis, y_pos_train_dis], axis=0)
-                # images_train = X_train[np.random.randint(0, X_train.shape[0], size=batch_size)]
-                # noise = np.random.uniform(-1.0, 1.0, size=[batch_size, 100])
-                # images_fake = self.generator.predict(noise)
-                # x = np.concatenate((images_train, images_fake))
-                # y = np.ones([2*batch_size, 1])
 
                 # trainign data for GAN model
                 X_train_GAN = tf.random.normal((batch_size, self.input_size[0]))

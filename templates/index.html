@@ -58,76 +58,14 @@ $(function() {
     reloadImgs();
 });
 
-// reload page part every 5000ms to show results as they come in
+// reload img container part every 5000ms to show results as they come in
 let interval;
 window.onload = function(){
   interval = setInterval(function() {
      $( "#img_container" ).load(window.location.href + " #img_container" );
-     // reloadImgs();
    }, 5000);
 }
 clearInterval(interval);
-
-// **************************************************************************
-// ALL COMMENTED OUT CODE IS WHAT I WAS TRYING TO DO BUT HAVENT SUCCEDDED YET
-// **************************************************************************
-// reload page to display incoming generated images
-// setTimeout(function(){
-//    // window.location.reload(1);
-//    $( "#img_container" ).load(window.location.href + " #img_container" );
-// }, 5000);
-
-// var xmlhttp = new XMLHttpRequest();
-
-// xmlhttp.onreadystatechange = function() {
-//   if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-//     if (xmlhttp.status == 200) {
-//       var n = (xmlhttp.responseText.match(/png/g) || []).length;
-//
-//       for (var i = 1; i <= n; i++) {
-//         var img1 = document.createElement('png');
-//         filename = "output_epoch_" + i;
-//         // {{url_for('static', filename=filename)}}
-//         // img1.src = '/static/' + i + '.png';
-//         img1.src = {{url_for('static', filename=filename)}};
-//         console.log(img.src);
-//         document.body.appendChild(img1);
-//       }
-//     }
-//   }
-// };
-//
-// xmlhttp.open("GET", "static/", true);
-// xmlhttp.send();
-
-// function reloadImgs() {
-//   const numImgResults = {{numEpochs}} / {{saveInternval}};
-//   console.log(numImgResults);
-//   for (let i = 0; i < numImgResults; i += {{saveInternval}}){
-//     console.log("made it");
-//     const numEpoch = i * {{saveInternval}}
-//
-//     var elem = document.createElement("img");
-//     elem.src = "/static/imgEpoch" + numEpoch + ".png";
-//     elem.setAttribute("class", "imgResult");
-//     elem.setAttribute("onerror", "this.style.display='none'");
-//
-//     document.getElementById("img_container").appendChild(elem);
-//   }
-// }
-
-// pull images from the directory and append them to the img_container
-// do , find imgEpochi until imgEpochi+saveInternval !exist
-
-// reload page every 5000ms
-// let interval;
-// window.onload = function(){
-//   interval = setInterval(function() {
-//      $( "#img_container" ).load(window.location.href + " #img_container" );
-//      // reloadImgs();
-//    }, 5000);
-// }
-// clearInterval(interval);
 </script>
 
 <body>
@@ -135,6 +73,8 @@ clearInterval(interval);
     <h2>CSCI 80a - Final Project</h2>
     <button id="runModel" type="button" onclick="window.location.href='{{ url_for( 'img_generator') }}';">Run GAN Model</button>
     <h3>Results</h3>
+    <!-- hard coded number of img containers,
+    I want to dynamically create number of containers when the user is able to input parameters -->
     <div id="img_container">
       <img src="{{url_for('static', filename='imgEpoch0.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch0">
       <img src="{{url_for('static', filename='imgEpoch100.png')}}" onerror="this.style.display = 'none'" alt="imgEpoch100">
